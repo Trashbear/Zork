@@ -13,7 +13,7 @@ namespace Zork
 
             while (isRunning == true)
             {
-                Console.WriteLine($"{_rooms[_currentRoom]}");
+                Console.WriteLine(_rooms[_currentRoom]);
                 Console.Write("> ");
                 string inputString = Console.ReadLine().Trim();
                 Commands command = ToCommand(inputString);
