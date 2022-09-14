@@ -4,6 +4,7 @@ namespace Zork
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
             Console.WriteLine("Welome to Zork!");
@@ -12,6 +13,7 @@ namespace Zork
 
             while (isRunning == true)
             {
+                Console.WriteLine($"{_rooms[_currentRoom]}");
                 Console.Write("> ");
                 string inputString = Console.ReadLine().Trim();
                 Commands command = ToCommand(inputString);
@@ -37,6 +39,7 @@ namespace Zork
                         {
                             outputString = "The way is shut!";
                         }
+                        break;
 
                         outputString = $"You moved {command}.";
                         break;
@@ -71,7 +74,7 @@ namespace Zork
 
                 case Commands.West when _currentRoom > 0:
                     _currentRoom--;
-                    didMove = true;                   
+                    didMove = true;
                     break;
             }
 
