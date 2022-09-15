@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zork
 {
-    class Program
+    internal class Program
     {
-        
         static void Main(string[] args)
         {
             Console.WriteLine("Welome to Zork!");
@@ -41,8 +41,6 @@ namespace Zork
                         }
                         break;
 
-                        outputString = $"You moved {command}.";
-                        break;
                     default:
                         outputString = "Unknown Command.";
                         break;
