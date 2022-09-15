@@ -5,6 +5,14 @@ namespace Zork
 {
     internal class Program
     {
+        private static string CurrentRoom
+        {
+            get
+            {
+                return _rooms[Location.Row, Location.Column];
+            }
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Welome to Zork!");
@@ -13,7 +21,7 @@ namespace Zork
 
             while (isRunning == true)
             {
-                Console.WriteLine(_rooms[_currentRoom]);
+                Console.WriteLine(CurrentRoom);
                 Console.Write("> ");
                 string inputString = Console.ReadLine().Trim();
                 Commands command = ToCommand(inputString);
@@ -58,28 +66,54 @@ namespace Zork
 
         private static bool Move(Commands command)
         {
-            bool didMove = false;
+            Assert.IsTrue(IsDirection(command), "Invalid Direction.");
+
+            bool didMove = true;
 
             switch (command)
             {
-                case Commands.North:
-                case Commands.South:
-                    break;
-                case Commands.East when _currentRoom < _rooms.Length - 1:
-                    _currentRoom++;
-                    didMove = true;
+                case Commands.North when Location.Row < _rooms.GetLength(0) - 1:
+                    Location.Row++;
                     break;
 
-                case Commands.West when _currentRoom > 0:
-                    _currentRoom--;
-                    didMove = true;
+                case Commands.South when Location.Row > 0:
+                    Location.Row--;
+                    break;
+
+                case Commands.East when Location.Column < _rooms.GetLength(1) - 1:
+                    Location.Column++;
+                    break;
+
+                case Commands.West when Location.Column > 0:
+                    Location.Column--;
+                    break;
+
+                default:
+                    didMove = false;
                     break;
             }
 
             return didMove;
         }
 
-        private static readonly string[] _rooms = { "Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
-        private static int _currentRoom = 1;
+        private static bool IsDirection(Commands command) => Directions.Contains(command);
+
+        private static readonly string[,] _rooms =
+        {
+            { "Rocky Trail", "South of House", "Canyon View" },
+            { "Forest", "West of House", "Behind House" },
+            { "Dense Woods", "North of House", "Clearing" },
+
+        };
+
+        private static readonly List<Commands> Directions = new List<Commands>
+        {
+            Commands.North,
+            Commands.South,
+            Commands.East,
+            Commands.West
+        };
+
+        private static (int Row, int Column) Location = (1, 1);
     }
 }
