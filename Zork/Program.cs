@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Zork
 {
@@ -18,9 +19,9 @@ namespace Zork
         static void Main(string[] args)
         {
             Console.WriteLine("Welome to Zork!");
-            const string defaultRoomsFilename = "Rooms.txt";
+            const string defaultRoomsFilename = "Rooms.json";
             string roomsFilename = (args.Length > 0 ? args[(int)CommandLineArguments.RoomsFilename] : defaultRoomsFilename);
-            InitializeRoomDescriptions(roomsFilename);
+            InitializeRooms(roomsFilename);
             Room previousRoom = null;
             bool isRunning = true;
 
@@ -112,26 +113,10 @@ namespace Zork
             Description
         }
 
-        private static void InitializeRoomDescriptions(string roomsFilename)
-        {
-            const string fieldDelimiter = "##";
-            const int expectedFieldCount = 2;
+        private static void InitializeRooms(string roomsFilename) =>
+            _rooms = JsonConvert.DeserializeObject<Room[,]>(File.ReadAllText(roomsFilename));
 
-            string[] lines = File.ReadAllLines(roomsFilename);
-            var roomQuery = from line in File.ReadLines(roomsFilename)
-                            let fields = line.Split(fieldDelimiter)
-                            where fields.Length == expectedFieldCount
-                            select (Name: fields[(int)Fields.Name],
-                                    Description: fields[(int)Fields.Description]);
-
-            foreach (var (Name, Description) in roomQuery)
-            {
-                RoomMap[Name].Description = Description;
-            }
-
-        }
-
-        private static readonly Room[,] _rooms =
+        private static Room[,] _rooms =
         {
             { new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") },
             { new Room("Forest"), new Room("West of House"), new Room("Behind House") },
