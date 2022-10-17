@@ -132,17 +132,6 @@ namespace Zork
         };
 
         private static (int Row, int Column) Location = (1, 1);
-
-        private static readonly Dictionary<string, Room> RoomMap;
-        static Program()
-        {
-            RoomMap = new Dictionary<string, Room>();
-            foreach (Room room in _rooms)
-            {
-                RoomMap[room.Name] = room;
-            }
-
-        }
         private enum CommandLineArguments
         {
             RoomsFilename = 0
