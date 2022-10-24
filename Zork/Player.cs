@@ -10,6 +10,8 @@ namespace Zork
         [JsonIgnore]
         public Room Location { get; private set; }
 
+        public List<Item> Inventory { get; }
+
         [JsonIgnore]
         public string LocationName
         {

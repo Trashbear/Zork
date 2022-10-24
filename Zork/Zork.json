@@ -1,5 +1,15 @@
 {
   "World": {
+    "Items": [
+        {
+          "Name": "Welcome Mat",
+          "Description": "A rubber mat with the words 'Welcome to Zork!' written on it."
+        },
+        {
+          "Name": "Mailbox",
+          "Description": "A small mailbox."
+        }
+    ],
     "StartingLocation": "West of House",
     "Rooms": [
       {
@@ -9,7 +19,11 @@
           "North": "North of House",
           "South": "South of House",
           "West": "Forest 1"
-        }
+        },
+        "InventoryNames": [
+          "Welcome Mat",
+          "Mailbox"
+        ]
       },
       {
         "Name": "North of House",

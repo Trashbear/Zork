@@ -17,7 +17,23 @@ namespace Zork
         private Dictionary<Directions, string> NeighborNames { get; set; }
 
         [JsonIgnore]
-        public IReadOnlyDictionary<Directions, Room> Neighbors { get; private set; }
+        public IReadOnlyDictionary<Directions, Room> Neighbors { get;  set; }
+
+        [JsonIgnore]
+        public List<Item> Inventory { get; private set; }
+
+        [JsonProperty]
+        private string[] InventoryNames { get; set; }
+
+        public Room(string name, string description, Dictionary<Directions, string>neighborNames, List<Item>inventory, string[] inventoryNames)
+        {
+            Name = name;
+            Description = description;
+            NeighborNames = neighborNames ?? new Dictionary<Directions, string>();
+            Inventory = inventory ?? new List<Item>();
+            InventoryNames = inventoryNames ?? new string[0];
+           
+        }
 
         public static bool operator ==(Room lhs, Room rhs)
         {
@@ -32,6 +48,17 @@ namespace Zork
             }
 
             return lhs.Name == rhs.Name;
+        }
+
+        public void UpdateInventory(World world)
+        {
+            Inventory = new List<Item>();
+            foreach (var inventoryName in InventoryNames)
+            {
+                Inventory.Add(world.ItemsByName[inventoryName]);
+            }
+
+            InventoryNames = null;
         }
 
         public static bool operator !=(Room lhs, Room rhs) => !(lhs == rhs);
