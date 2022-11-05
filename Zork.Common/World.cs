@@ -1,30 +1,33 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
-namespace Zork
+namespace Zork.Common
 {
     public class World
     {
-        public HashSet<Room> Rooms { get; set; }
-
-        public Item[] Items { get; }
+        public Room[] Rooms { get; }
 
         [JsonIgnore]
-        public IReadOnlyDictionary<string, Room> RoomsByName => mRoomsByName;
+        public Dictionary<string, Room> RoomsByName { get; }
 
-        public Player SpawnPlayer() => new Player(this, StartingLocation);
-
+        public Item[] Items { get; }
+        
         [JsonIgnore]
         public Dictionary<string, Item> ItemsByName { get; }
 
-        public World(Item[] items)
+        public World(Room[] rooms, Item[] items)
         {
+            Rooms = rooms;
+            RoomsByName = new Dictionary<string, Room>(StringComparer.OrdinalIgnoreCase);
+            foreach (Room room in rooms)
+            {
+                RoomsByName.Add(room.Name, room);
+            }
+
             Items = items;
             ItemsByName = new Dictionary<string, Item>(StringComparer.OrdinalIgnoreCase);
-
             foreach (Item item in Items)
             {
                 ItemsByName.Add(item.Name, item);
@@ -32,23 +35,13 @@ namespace Zork
         }
 
         [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
+        private void OnDeserialized(StreamingContext streamingContext)
         {
-            mRoomsByName = Rooms.ToDictionary(room => room.Name, room => room);
-
             foreach (Room room in Rooms)
             {
                 room.UpdateNeighbors(this);
                 room.UpdateInventory(this);
             }
-
         }
-
-        [JsonProperty]
-        private string StartingLocation { get; set; }
-
-        private Dictionary<string, Room> mRoomsByName;
-
-
     }
 }
