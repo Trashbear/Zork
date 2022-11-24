@@ -17,22 +17,25 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI moveText;
 
-    private void Start()
-    {
-        InputService.SetFocus();
-        locationText.text = _game.Player.CurrentRoom.Name;
-    }
-
     private void Awake()
     {
         TextAsset gameJson = Resources.Load<TextAsset>("GameJson");
         _game = JsonConvert.DeserializeObject<Game>(gameJson.text);
+        _game.Player.LocationChanged += Player_LocationChanged;
         _game.Run(InputService, OutputService);
+    }
+    private void Start()
+    {
+        InputService.SetFocus();
+        locationText.text = _game.Player.CurrentRoom.Name;
+        scoreText.text = $"Score: {_game.Player.Score}";
+        moveText.text = $"Moves: {_game.Player.MovesMade}";
     }
 
     private void Player_LocationChanged(object sender, Room location)
     {
         locationText.text = location.Name;
+        moveText.text = $"Moves: {_game.Player.MovesMade}";
     }
 
     private void Update()
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
         {
             InputService.ProcessInput();
             InputService.SetFocus();
+            scoreText.text = $"Score: {_game.Player.Score}";
         }
 
         if (_game.IsRunning == false)
