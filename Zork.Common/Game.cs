@@ -146,7 +146,7 @@ namespace Zork.Common
 
                 case Commands.Heal:
                     Output.WriteLine("You cast a spell to heal yourself!");
-                    Output.WriteLine($"You gave {Player.Health} health remaining.");
+                    Output.WriteLine($"You have {Player.Health} health remaining.");
                     DamageCheck();
                     break;
 
