@@ -50,8 +50,7 @@ namespace Zork.Common
         public void RandomizeTroll()
         {
             Random rnd = new Random();
-            //dangerRoom = rnd.Next(Rooms.Length - 1);
-            dangerRoom = 0;
+            dangerRoom = rnd.Next(Rooms.Length - 1);
             Rooms[dangerRoom].Troll = true;
         }
 

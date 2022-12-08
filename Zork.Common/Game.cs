@@ -182,7 +182,10 @@ namespace Zork.Common
                 Look();
             }
 
-            Output.WriteLine($"\n{Player.CurrentRoom}");
+            if (IsRunning == true)
+            {
+                Output.WriteLine($"\n{Player.CurrentRoom}");
+            }
         }
         
         private void Look()
@@ -195,6 +198,7 @@ namespace Zork.Common
             
             if(Player.CurrentRoom.Troll == true)
             {
+                Output.WriteLine("");
                 Output.WriteLine("A Troll prepares to strike!");
             }
             
@@ -212,6 +216,7 @@ namespace Zork.Common
                 if(itemToTake.Reward == true)
                 {
                     Player.Score++;
+                    itemToTake.Reward = false;
                 }
                 Player.AddItemToInventory(itemToTake);
                 Player.CurrentRoom.RemoveItemFromInventory(itemToTake);
@@ -296,7 +301,14 @@ namespace Zork.Common
         {
             int roomIndex = World.dangerRoom;
             Room trollRoom = World.Rooms[roomIndex];
-            Output.WriteLine($"You shout. You hear a roar from {trollRoom.Name}");
+            if (World.Rooms[roomIndex].Troll == true)
+            {
+                Output.WriteLine($"You shout. You hear a roar from {trollRoom.Name}");
+            }
+            else
+            {
+                Output.WriteLine($"You shout. Your voice echoes through the air.");
+            }
         }
 
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.Unknown;

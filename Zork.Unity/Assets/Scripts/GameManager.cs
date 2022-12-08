@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     {
         locationText.text = location.Name;
         moveText.text = $"Moves: {_game.Player.MovesMade}";
+        
     }
 
     private void Update()

@@ -5,17 +5,38 @@
       {
         "Name": "Mat",
         "LookDescription": "A rubber mat saying 'Welcome to Zork!' lies here.",
-        "InventoryDescription": "A welcome mat."
+        "InventoryDescription": "A welcome mat.",
+        "Reward":  false
       },
       {
         "Name": "Mailbox",
         "LookDescription": "There is a small mailbox here.",
-        "InventoryDescription": "A small mailbox."
+        "InventoryDescription": "A small mailbox.",
+        "Reward": false
       },
       {
         "Name": "Leaves",
         "LookDescription": "There is a pile of leaves here.",
-        "InventoryDescription": "A pile of leaves."
+        "InventoryDescription": "A pile of leaves.",
+        "Reward": false
+      },
+      {
+        "Name": "Trophy",
+        "LookDescription": "There is a golden trophy here.",
+        "InventoryDescription": "A trophy taken from a Troll.",
+        "Reward": true
+      },
+      {
+        "Name": "Sword",
+        "LookDescription": "There is a silver sword here.",
+        "InventoryDescription": "A sword for slaying Trolls.",
+        "Reward": false
+      },
+      {
+        "Name": "Scroll",
+        "LookDescription": "There is an ancient scroll here",
+        "InventoryDescription": "'The sword of heroes lies in the forest. Scream to find the Troll.'",
+          "Reward": false
       }
     ],
     "Rooms": [
@@ -29,7 +50,8 @@
         },
         "InventoryNames": [
           "Mat",
-          "Mailbox"
+          "Mailbox",
+          "Scroll"
         ]
       },
       {
@@ -65,7 +87,10 @@
         "NeighborNames": {
           "South": "Forest 3",
           "East": "West of House"
-        }
+        },
+        "InventoryNames": [
+          "Sword"
+        ]
       },
       {
         "Name": "Forest 2",
