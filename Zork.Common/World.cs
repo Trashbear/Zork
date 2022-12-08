@@ -17,6 +17,9 @@ namespace Zork.Common
         [JsonIgnore]
         public IReadOnlyDictionary<string, Item> ItemsByName => _itemsByName;
 
+        public int dangerRoom { get; set; }
+
+
         public World(Room[] rooms, Item[] items)
         {
             Rooms = rooms;
@@ -42,6 +45,14 @@ namespace Zork.Common
                 room.UpdateNeighbors(this);
                 room.UpdateInventory(this);
             }
+        }
+
+        public void RandomizeTroll()
+        {
+            Random rnd = new Random();
+            //dangerRoom = rnd.Next(Rooms.Length - 1);
+            dangerRoom = 0;
+            Rooms[dangerRoom].Troll = true;
         }
 
         private readonly Dictionary<string, Room> _roomsByName;

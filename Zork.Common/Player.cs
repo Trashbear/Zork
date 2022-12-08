@@ -11,6 +11,7 @@ namespace Zork.Common
 
         public int Score = 0;
 
+        public int Health = 3;
         public Room CurrentRoom
         {
             get => _currentRoom;

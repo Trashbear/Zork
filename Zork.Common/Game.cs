@@ -34,6 +34,7 @@ namespace Zork.Common
 
             IsRunning = true;
             Input.InputReceived += OnInputReceived;
+            World.RandomizeTroll();
             Output.WriteLine("Welcome to Zork!");
             Look();
             Output.WriteLine($"\n{Player.CurrentRoom}");
@@ -71,6 +72,7 @@ namespace Zork.Common
 
                 case Commands.Look:
                     Look();
+                    DamageCheck();
                     break;
 
                 case Commands.North:
@@ -91,6 +93,7 @@ namespace Zork.Common
                     {
                         Take(subject);
                     }
+                    DamageCheck();
                     break;
 
                 case Commands.Drop:
@@ -102,6 +105,7 @@ namespace Zork.Common
                     {
                         Drop(subject);
                     }
+                    DamageCheck();
                     break;
 
                 case Commands.Inventory:
@@ -117,11 +121,55 @@ namespace Zork.Common
                             Output.WriteLine(item.InventoryDescription);
                         }
                     }
+                    DamageCheck();
                     break;
 
                 case Commands.Reward:
                     Player.Score++;
                     Output.WriteLine("Score increased!");
+                    DamageCheck();
+                    break;
+
+                case Commands.Score:
+                    Output.WriteLine($"Your score is {Player.Score}");
+                    break;
+
+                case Commands.Scream:
+                    FindTroll();
+                    DamageCheck();
+                    break;
+
+                case Commands.Health:
+                    Output.WriteLine($"You gave {Player.Health} health remaining.");
+                    DamageCheck();
+                    break;
+
+                case Commands.Heal:
+                    Output.WriteLine("You cast a spell to heal yourself!");
+                    Output.WriteLine($"You gave {Player.Health} health remaining.");
+                    DamageCheck();
+                    break;
+
+                case Commands.Attack:
+                    if (subject! != null)
+                    {
+                        bool itemCheck = false;
+                        foreach (Item item in Player.Inventory)
+                        {
+                            if (item.Name == "Sword")
+                            {
+                                itemCheck = true;
+                                break;
+                            }
+                        }
+                        AttackCheck(itemCheck, subject);
+
+                    }
+                    else
+                    {
+                        Output.WriteLine("What are you trying to hit?");
+                    }
+                    DamageCheck();
                     break;
 
                 default:
@@ -144,6 +192,12 @@ namespace Zork.Common
             {
                 Output.WriteLine(item.LookDescription);
             }
+            
+            if(Player.CurrentRoom.Troll == true)
+            {
+                Output.WriteLine("A Troll prepares to strike!");
+            }
+            
         }
 
         private void Take(string itemName)
@@ -155,6 +209,10 @@ namespace Zork.Common
             }
             else
             {
+                if(itemToTake.Reward == true)
+                {
+                    Player.Score++;
+                }
                 Player.AddItemToInventory(itemToTake);
                 Player.CurrentRoom.RemoveItemFromInventory(itemToTake);
                 Output.WriteLine("Taken.");
@@ -174,6 +232,71 @@ namespace Zork.Common
                 Player.RemoveItemFromInventory(itemToDrop);
                 Output.WriteLine("Dropped.");
             }
+        }
+
+        private void AttackCheck (bool check, string victim)
+        {
+            if (check == true)
+            {
+                Attack(victim);
+            }
+            else
+            {
+                Output.WriteLine("You have nothing to attack with.");
+            }
+        }
+        private void Attack(string target)
+        {
+            bool targetCheck = string.Equals(target, "Troll", StringComparison.OrdinalIgnoreCase);
+            if (targetCheck = true && Player.CurrentRoom.Troll == true)
+            {
+               if(Player.CurrentRoom.TrollHealth > 1)
+                {
+                    Output.WriteLine("You slash at the Troll!");
+                    Player.CurrentRoom.TrollHealth--;
+                }
+                else
+                {
+                   Output.WriteLine("The troll is slain! It drops a gleaming trophy.");
+                    Player.CurrentRoom.AddItemToInventory(World.Items[3]);
+                    Player.CurrentRoom.Troll = false;
+                }
+            }
+            else
+            {
+                Output.WriteLine("There is nothing to attack");
+            }
+            
+        }
+
+        private void DamageCheck()
+        {
+            if (Player.CurrentRoom.Troll == true)
+            {
+                Damage();
+            }
+        }
+        private void Damage()
+        {
+            if (Player.Health > 1)
+            {
+                Output.WriteLine("The troll swings at you!");
+                Player.Health--;
+                Output.WriteLine($"You gave {Player.Health} health remaining.");
+            }
+            else
+            {
+                Output.WriteLine("The Troll delivers the finishing blow. You lose.");
+                IsRunning = false;
+                Output.WriteLine("Thank you for playing!");
+            }
+        }
+
+        private void FindTroll()
+        {
+            int roomIndex = World.dangerRoom;
+            Room trollRoom = World.Rooms[roomIndex];
+            Output.WriteLine($"You shout. You hear a roar from {trollRoom.Name}");
         }
 
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.Unknown;

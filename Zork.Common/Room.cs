@@ -11,6 +11,10 @@ namespace Zork.Common
 
         public string Description { get; set; }
 
+        public bool Troll { get; set; }
+
+        public int TrollHealth = 3;
+
         [JsonIgnore]
         public IReadOnlyDictionary<Directions, Room> Neighbors => _neighbors;
 
@@ -20,13 +24,15 @@ namespace Zork.Common
         [JsonIgnore]
         public IEnumerable<Item> Inventory => _inventory;
 
+
         [JsonProperty]
         private string[] InventoryNames { get; set; }
 
-        public Room(string name, string description, Dictionary<Directions, string> neighborNames, string[] inventoryNames)
+        public Room(string name, string description, Dictionary<Directions, string> neighborNames, string[] inventoryNames, bool troll)
         {
             Name = name;
             Description = description;
+            Troll = troll;
             NeighborNames = neighborNames ?? new Dictionary<Directions, string>();
             _neighbors = new Dictionary<Directions, Room>();
 

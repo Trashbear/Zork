@@ -22,6 +22,12 @@
         I = Inventory,
         Reward,
         R = Reward,
+        Score,
+        Scream,
+        Attack,
+        Health,
+        Damage,
+        Heal,
         Unknown
     }
 }
